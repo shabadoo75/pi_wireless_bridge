@@ -1,0 +1,8 @@
+---
+
+# defaut vars
+
+counry_code: AU
+ssid_name: home_bridge
+wifi_mode: g
+wifi_channel: 11

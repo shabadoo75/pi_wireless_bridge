@@ -1,0 +1,110 @@
+---
+- name: Update current packages
+  apt:
+    force_apt_get: yes
+    update_cache: yes
+    upgrade: yes
+
+- name: Install new packages
+  apt:
+    name: [
+           'hostapd',
+           'vim'
+          ]
+    state: latest
+    force_apt_get: yes
+
+- name: use vim as default editor
+  lineinfile:
+    dest: "{{ item }}/.bashrc"
+    line: 'export EDITOR=vim'
+  with_items:
+    - /home/pi
+    - /root
+
+- name: US keyboard layout
+  copy:
+    src: keyboard
+    dest: /etc/default/keyboard
+    owner: root
+    group: root
+    mode: 0644
+
+- name: change the hostname
+  hostname:
+    name: "{{ hostname }}"
+  when: hostname is defined
+
+- name: set the hostname fact also
+  set_fact: ansible_hostname={{ hostname }}
+  when: hostname is defined
+
+- name: add local host name to /etc/hosts
+  replace:
+    path: /etc/hosts
+    regexp: '\slocalhost'
+    replace: "  localhost {{ hostname }}"
+  when: hostname is defined
+
+- name: set the timezone to Sydney
+  file:
+    src: /usr/share/zoneinfo/Australia/Sydney
+    dest: /etc/localtime
+    owner: root
+    group: root
+    mode: 0644
+    state: link
+
+- name: start and enable the ssh service
+  service:
+    name: ssh
+    state: started
+    enabled: yes
+
+- name: Enable hostapd service and ensure it is not masked
+  systemd:
+    name: hostapd
+    enabled: yes
+    masked: no
+
+- name: Enable systemd-networkd service
+  systemd:
+    name: systemd-networkd
+    enabled: yes
+    masked: no
+
+- name: Create a bridge device
+  copy:
+    src: bridge-br0.netdev
+    dest: /etc/systemd/network/bridge-br0.netdev
+    owner: root
+    group: root
+    mode: 0644
+
+- name: populate the bridge
+  copy:
+    src: br0-member-eth0.network
+    dest: /etc/systemd/network/br0-member-eth0.network
+    owner: root
+    group: root
+    mode: 0644
+
+- name: block the eth0 and wlan0 interfaces from getting an IP
+  lineinfile:
+    path: /etc/dhcpcd.conf
+    insertbefore: BOF
+    line: 'denyinterfaces wlan0 eth0'
+
+- name: the bridge should get an IP
+  lineinfile:
+    path: /etc/dhcpcd.conf
+    insertafter: EOF
+    line: 'interface br0'
+
+- name: Configure the access point software
+  template:
+    src: hostapd.conf
+    dest: /etc/hostapd/hostapd.conf
+    owner: root
+    group: root
+    mode: 0644
