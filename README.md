@@ -1,8 +1,8 @@
 # Raspberry Pi wireless bridge
 
-Use a Rasperry Pi as a WiFi bridge! I wired up my house so rooms that are a long way from the WiFi router can still get decent internet. Problem is some devices like Google Chromecast and the Nintendo Switch are wireless only. By connecting a Raspberry Pi to wired ethernet then using it as a WiFi bridge these devices get a strong signal.
+Use a Raspberry Pi as a WiFi bridge! I wired up my house so rooms that are a long way from the WiFi router can still get decent internet. Problem is some devices like Google Chromecast and the Nintendo Switch are wireless only. By connecting a Raspberry Pi to wired ethernet then using it as a WiFi bridge these devices get a strong signal.
 
-All this does is automate the steps from the excelent guide at https://www.raspberrypi.org/documentation/configuration/wireless/access-point-bridged.md
+All this does is automate the steps from the excellent guide at https://www.raspberrypi.org/documentation/configuration/wireless/access-point-bridged.md
 
 ## Installation
 
