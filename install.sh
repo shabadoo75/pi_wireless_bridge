@@ -40,7 +40,7 @@ echo "****************************"
 echo
 
 read -e -p "Looks good, start the install? [Y/N]: " -i "N" install
-if [ "$install" = "Y" or "$install" = "y" ]; then
+if [[ "$install" = "Y" || "$install" = "y" ]]; then
   echo "starting..."
   echo
 else
@@ -55,5 +55,5 @@ ansible-playbook -u pi \
     -e "ssid_name=$ssid_name" \
     -e "wifi_mode=$wifi_mode" \
     -e "wifi_channel=$wifi_channel" \
-    -i ansible/hosts \
+    -i ansible/hosts.yml \
     ansible/playbook.yml
