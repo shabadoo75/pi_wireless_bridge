@@ -23,3 +23,8 @@ install
 cd pi_wireless_bridge-main
 ./install.sh
 ```
+
+install latest PiOS lite
+connect cable and keyboard
+login as pi user
+change password

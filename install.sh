@@ -10,6 +10,9 @@ sudo apt-get -y install ansible
 echo
 echo
 
+echo "Now we need some configuration details for your bridge"
+echo
+
 read -e -p "Hostname for the Pi: " -i "bridge" hostname
 
 read -e -p "WiFi country code: " -i "AU" counry_code
@@ -37,8 +40,9 @@ echo "****************************"
 echo
 
 read -e -p "Looks good, start the install? [Y/N]: " -i "N" install
-if [ "$install" = "Y" ]; then
+if [ "$install" = "Y" or "$install" = "y" ]; then
   echo "starting..."
+  echo
 else
   echo "exit"
   exit 0
@@ -51,4 +55,5 @@ ansible-playbook -u pi \
     -e "ssid_name=$ssid_name" \
     -e "wifi_mode=$wifi_mode" \
     -e "wifi_channel=$wifi_channel" \
+    -i ansible/hosts \
     ansible/playbook.yml
